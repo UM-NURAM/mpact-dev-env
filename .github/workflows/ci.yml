@@ -19,9 +19,10 @@ jobs:
     steps:
       - name: Show Runner info
         run: |
+          whoami
+          id
           cat /etc/os-release
           uname -a
-          nproc
           lscpu
 
       - name: Setup install directory
@@ -56,26 +57,27 @@ jobs:
           cmake --build mpact_tpls/build
 
   rocky8:
-    name: RockyLinux 8.10
+    name: RockyLinux 8
     runs-on: ubuntu-24.04
     container: rockylinux:8
 
     steps:
       - name: Show Runner info
         run: |
+          whoami
+          id
           cat /etc/os-release
           uname -a
-          nproc
           lscpu
 
       - name: Setup install directory
         run: |
-          sudo mkdir -p "${INSTALL_PREFIX}"
-          sudo chown -R "$(id -u):$(id -g)" "${INSTALL_PREFIX}"
+          mkdir -p "${INSTALL_PREFIX}"
+          chown -R "$(id -u):$(id -g)" "${INSTALL_PREFIX}"
 
       - name: Install prereqs
         run: |
-          sudo dnf install -y \
+          dnf install -y \
             gcc gcc-c++ gfortran \
             cmake make git \
             libpng-devel \

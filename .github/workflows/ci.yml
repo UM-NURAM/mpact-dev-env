@@ -78,7 +78,7 @@ jobs:
       - name: Install prereqs
         run: |
           dnf install -y \
-            gcc gcc-c++ gfortran \
+            gcc gcc-c++ gcc-gfortran \
             cmake make git \
             libpng-devel \
             python3

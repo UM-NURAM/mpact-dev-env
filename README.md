@@ -1,10 +1,10 @@
 # Quickstart
 If you think you have an environment with all prerequisites satisfied, and hate reading, then you can try to simply install the TPLs with
 ```
-$ git clone https://github.com/UM-NURAM/mpact-dev.git
-$ cd mpact-dev/mpact_tpls
-$ cmake -S . -B build -D CMAKE_INSTALL_PREFIX=<path to tpl install dir> -D MPACT_TPLs_BUILD_PARALLEL=4
-$ cmake --build build
+git clone https://github.com/UM-NURAM/mpact-dev.git
+cd mpact-dev/mpact_tpls
+cmake -S . -B build -D CMAKE_INSTALL_PREFIX=<path to tpl install dir> -D MPACT_TPLs_BUILD_PARALLEL=4
+cmake --build build
 ```
 
 Note that you should specify the directory in which to install the TPLs **`<path to tpl install dir> `**.

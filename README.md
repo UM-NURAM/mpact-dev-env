@@ -133,7 +133,7 @@ python3 -m pip install numpy matplotlib pandas h5py
 
 If your Ubunut environment has `python3` but does not have `venv` or `pip` and you do not have admin rights, then its recommended you install your own Python 3 distribution like anaconda or miniconda.
 
-### RockLinux-8.10
+### RockyLinux-8.10
 Assuming you have `python3` installed by the OS package manager, then the following command should work.
 ```
 python3 -m pip install --user numpy matplotlib pandas h5py

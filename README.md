@@ -25,7 +25,7 @@ Lastly, in the near future, we plan to incorporate Singularity container definit
 Alternatively to building this, you will eventually be able to pull the container yourself.
 
 ## Suggested Operating Systems
-MPACT is a command line console program designed to run under linux.
+MPACT is a command line console program designed to run under Linux.
 The recommended Linux distributions and versions are provided in the table below.
 
 | Linux Distribution | Version |
@@ -33,9 +33,9 @@ The recommended Linux distributions and versions are provided in the table below
 |  Ubuntu            | 24.04   |
 | Rocky              | 8.10    |
 
-On windows machines, using Windows Subsystem for Linux (WSL) with one of the above linux distributions is recommended.
+On windows machines, using Windows Subsystem for Linux (WSL) with one of the above Linux distributions is recommended.
 
-If you are unsure about which version of Linux you are using, you can check your linux operating system using the following command.
+If you are unsure about which version of Linux you are using, you can check your Linux operating system using the following command.
 ```
 cat /etc/os-release
 ```
@@ -45,12 +45,17 @@ If you think you have an environment with all prerequisites satisfied, then you 
 ```
 $ git clone https://github.com/UM-NURAM/mpact-dev.git
 $ cd mpact-dev/mpact_tpls
-$ cmake -S . -B build -D CMAKE_INSTALL_PREFIX=*<path to tpl install dir>* -D MPACT_TPLs_BUILD_PARALLEL=4
+$ cmake -S . -B build -D CMAKE_INSTALL_PREFIX=<path to tpl install dir> -D MPACT_TPLs_BUILD_PARALLEL=4
 $ cmake --build build
 ```
 
-Note that you should specify the directory in which to install the TPLs.
+Note that you should specify the directory in which to install the TPLs **`<path to tpl install dir> `**.
 Also note it will take more than 2 hours with 4 processors to build and install the TPLs.
+
+Once the build step is complete, the TPLs are installed and it is safe to delete the build directory.
+```
+rm -rf build
+```
 
 # Prerequisites
 The software necessary to build MPACT and its recommended TPLs is given in the following table.
@@ -140,5 +145,9 @@ conda activate mpact-env
 Once you have all the prerequisites installed, then it the next step should be fairly automatic.
 At this stage it is just the instructions in the [quickstart](#quickstart).
 
+Then load the TPLs with
+```
+source <path to tpl install dir>/load_dev_env.sh
+```
 
 

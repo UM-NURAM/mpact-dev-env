@@ -96,6 +96,12 @@ foreach(PYPACKAGE ${REQUIRED_PYTHON_PACKAGES})
     endif()
 endforeach()
 
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/load_dev_env.sh.in"
+    "${CMAKE_INSTALL_PREFIX}/load_dev_env.sh"
+    @ONLY
+)
+message(STATUS "Wrote environment script ${CMAKE_INSTALL_PREFIX}/load_dev_env.sh")
 
 if(${PROJECT_NAME}_INSTALL_MPI)
     ExternalProject_Add(mpich-${MPICH_VERSION}

@@ -9,7 +9,7 @@ on:
       - main
 
 env:
-  INSTALL_PREFIX=/opt/mpact
+  INSTALL_PREFIX: "/opt/mpact"
 
 jobs:
   main:

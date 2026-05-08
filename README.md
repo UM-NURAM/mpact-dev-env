@@ -126,7 +126,7 @@ sudo apt-get install -y gcc g++ gfortran cmake make git perl python3 python3-ven
 
 ```
 sudo dnf update
-sudo dnf install -y gcc gcc-c++ gcc-gfortran cmake make git perl which vim libpng-devel
+sudo dnf install -y gcc gcc-c++ gcc-gfortran cmake make git python3 which vim libpng-devel
 ```
 
 ## Installing Python prequisite packages (5 minutes)

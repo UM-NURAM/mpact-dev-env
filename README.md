@@ -175,3 +175,37 @@ cmake -S . -B build
 ```
 
 ## Testing changes to packages and versions
+This is experimental, but if you feel like playing with different versions of existing TPLs, then you can simply modify the `CMakeLists.txt` in two places.
+One place to set the version of the TPL, and the other to set the SHA1 of the tarball on the web.
+These are conveniently located near the top and look like:
+```
+# TPL Version and SHA1 info
+set(  MPICH_VERSION 4.2.3)
+set(   HDF5_VERSION 1.10.1)
+set( LAPACK_VERSION 3.7.1)
+set(  PETSC_VERSION 3.13.6)
+set(  SLEPC_VERSION 3.13.4)
+set(    PNG_VERSION 1.6.55)
+set(PUGIXML_VERSION 1.15)
+set(   GMSH_VERSION 4.12.2)
+
+set(    MPICH${MPICH_VERSION}_SHA1 1be671c6f1293ab7f4dbf7ac71c3890de3dabff0)
+set(      HDF5${HDF5_VERSION}_SHA1 73b77a23ca099ac47d8241f633bf67430007c430)
+set(  LAPACK${LAPACK_VERSION}_SHA1 84c4f7163b52b1bf1f6ca2193f6f48ed3dec0fab)
+set(    PETSC${PETSC_VERSION}_SHA1 2b6475e092356f4cb67afccb755a853db6eb5285)
+set(    SLEPC${SLEPC_VERSION}_SHA1 2dbc73a17adc87a36d52c991bcbfa81db036454b)
+set(        PNG${PNG_VERSION}_SHA1 70b9c9c450f19cd50e686e977dfd709aecc09ac3)
+set(PUGIXML${PUGIXML_VERSION}_SHA1 e52292c0cbf1c22f47dc4ff1dfd4a482071d1c9c)
+set(      GMSH${GMSH_VERSION}_SHA1 e606e92d59b8bae245e5229f4bd543991d9fd5d7)
+```
+Depending on how severely you change the version numbers, you may need to change the URL paths that appear farther down.
+If you really want to do this, we trust you can figure it out.
+
+
+To add new libraries, we suggest following the patternn of how the existing TPL definitions are done.
+1. Create a variable for the package version
+2. Create a variable for the package version's SHA1
+3. Create a CMake option to enable/disable installing the TPL.
+4. Implement TPL download, configure, build, install setup using CMake's `ExternalProject_Add`
+
+Note that for TPLs, URLs to source tarballs are preferred to cloning git repositories since we do not need the full history of the git project.

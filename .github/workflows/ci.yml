@@ -85,7 +85,9 @@ jobs:
 
       - name: Install Python packages
         run: |
-          python3 -m pip install --user numpy matplotlib pandas h5py
+          dnf install -y epel-release
+          dnf config-manager --set-enabled powertools
+          dnf install -y python3-numpy python3-matplotlib python3-pandas python3-h5py
 
       - name: Check out repository
         uses: actions/checkout@v4

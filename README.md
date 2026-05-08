@@ -8,7 +8,7 @@ cmake --build build
 ```
 
 Note that you should specify the directory in which to install the TPLs **`<path to tpl install dir> `**.
-Also note **it will take more than 2 hours** with 4 processors to build and install the TPLs.
+Also note **it will likely take more than 2 hours** with 4 processors to build and install the TPLs.
 
 Once the build step is complete, the TPLs are installed and it is safe to delete the build directory.
 ```
@@ -84,7 +84,7 @@ As mentioned previously, in addition to a Python 3 interpreter, there are a few 
  * `xdrlib` (required by recommended version of PETSc)
 
 An important note about `xdrlib` is that it was deprecated in Python 3.11 and removed in Python 3.13.
-If you are using a version of Python equal to greater than 13.0 you will need to install the `standard-xdrlib` python package.
+If you are using a version of Python equal to greater than 13.0 you will need to install the `standard-xdrlib` Python package.
 
 Lastly, some other packages that are highly recommended but not required are:
  * `which`
@@ -104,6 +104,16 @@ In fact, this may be preferred in most cases.
 This is totally fine and should not create any issues, but if you use a non-OS distribution of Python, pay careful attention to the [python package installation instructions](#other-python-3-distributions).
 
 ## Installing prerequisites (10 minutes)
+In this section it is assumed that you have admin privileges.
+**If you do not have admin privileges you cannot complete this step** as is.
+
+In that event you do not have admin privileges a few work arounds are to:
+1. Contact your sysadmin to install these packages
+2. Use a container environment like [Singularity](https://docs.sylabs.io/guides/3.5/user-guide/introduction.html)/[Apptainer](https://apptainer.org/) or [Docker](https://www.docker.com/)
+3. Use [spack](https://spack.io/) and create a spack environment
+
+Based on our experiences with these different approaches, these are listed in order of least effort to most effort.
+For container environments Apptainer is preferred to Singularity and Singularity is preferred to Docker.
 
 ### Ubuntu-24.04
 
@@ -119,7 +129,7 @@ sudo dnf update
 sudo dnf install -y gcc gcc-c++ gcc-gfortran cmake make git perl which vim libpng-devel
 ```
 
-## Installing python prequisite packages (5 minutes)
+## Installing Python prequisite packages (5 minutes)
 
 ### Ubuntu-24.04
 Assuming you have installed `python3` along with `venv` and `pip`, then the recommended way to proceed is to create a Python 3 virtual environment.
@@ -139,19 +149,21 @@ Assuming you have `python3` installed by the OS package manager, then the follow
 python3 -m pip install --user numpy matplotlib pandas h5py
 ```
 ### Other Python 3 Distributions
-If you are using an anaconda/miniconda distribution of python then you can install the packages with conda using
+If you are using an anaconda/miniconda distribution of Python then you can install the packages with conda using
 ```
 conda install numpy matplotlib pandas h5py
 ```
 Note that you can also do this in a custom conda environment by doing the following **first**.
 ```
-conda env create mpact-env
+conda env create --name mpact-env
 conda activate mpact-env
 ```
 
 # Installing the Third Party Libraries (2 to 4 hours)
 Once you have all the prerequisites installed, then the next steps should be fairly automatic.
 At this stage it is just the instructions in the [quickstart](#quickstart).
+
+If you want more info or want to change something, then keep reading.
 
 ## CMake Options
 All of the CMake options supported by this project are echoed to the screen during the configure.

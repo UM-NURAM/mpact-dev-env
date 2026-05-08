@@ -37,7 +37,7 @@ On windows machines, using Windows Subsystem for Linux (WSL) with one of the abo
 
 If you are unsure about which version of Linux you are using, you can check your linux operating system using the following command.
 ```
-$ cat /etc/os-release
+cat /etc/os-release
 ```
 
 ## Quickstart
@@ -55,7 +55,7 @@ Also note it will take more than 2 hours with 4 processors to build and install 
 # Prerequisites
 The software necessary to build MPACT and its recommended TPLs is given in the following table.
 
-| Package | Minimum Version | Ubuntu 24.04 default | Rocky8 Default |
+| Package | Minimum Version | Ubuntu 24.04 default | Rocky 8.10 Default |
 | :------ | --------------: | -------------------: | -------------: |
 | git      | 1.8.3          | 2.43.0               | 2.43.7         |
 | cmake    | 3.18           | 3.28.3               | 3.26.5         |
@@ -95,15 +95,15 @@ As an alternative however, you may wish to use your own local installation of Py
 ### Ubuntu-24.04
 
 ```
-$ sudo apt-get update
-$ sudo apt-get install -y gcc g++ gfortran cmake make git perl python3 python3-venv python3-pip which vim
+sudo apt-get update
+sudo apt-get install -y gcc g++ gfortran cmake make git perl python3 python3-venv python3-pip which vim
 ```
 
 ### RockyLinux-8.10
 
 ```
-$ sudo yum update
-$ sudo yum install -y gcc gcc-c++ gcc-gfortran cmake make git perl which vim
+sudo yum update
+sudo yum install -y gcc gcc-c++ gcc-gfortran cmake make git perl which vim
 ```
 
 ## Installing python prequisite packages (5 minutes)
@@ -113,9 +113,9 @@ Assuming you have installed `python3` along with `venv` and `pip`, then the reco
 This is because on Ubuntu-24.04 the Python environment is marked as "externally managed" and this prevents `pip` from installing packages at the system or user site-package levels.
 This can be overriden, but may cause you more trouble than you want, so this why a virtual environment is recommended.
 ```
-$ python3 -m venv ~/.venv/mpact-env
-$ source ~/.venv/mpact-env/bin/activate
-$ python3 -m pip install numpy matplotlib pandas h5py
+python3 -m venv ~/.venv/mpact-env
+source ~/.venv/mpact-env/bin/activate
+python3 -m pip install numpy matplotlib pandas h5py
 ```
 
 If your Ubunut environment has `python3` but does not have `venv` or `pip` and you do not have admin rights, then its recommended you install your own Python 3 distribution like anaconda or miniconda.
@@ -123,17 +123,17 @@ If your Ubunut environment has `python3` but does not have `venv` or `pip` and y
 ### RockLinux-8.10
 Assuming you have `python3` installed by the OS package manager, then the following command should work.
 ```
-$ python3 -m pip install --user numpy matplotlib pandas h5py
+python3 -m pip install --user numpy matplotlib pandas h5py
 ```
 ### Other Python 3 Distribution
 If you are using an anaconda/miniconda distribution of python then you can install the packages with conda using
 ```
-$ conda install numpy matplotlib pandas h5py
+conda install numpy matplotlib pandas h5py
 ```
 Note that you can also do this in a custom conda environment by doing the following **first**.
 ```
-$ conda env create mpact-env
-$ conda activate mpact-env
+conda env create mpact-env
+conda activate mpact-env
 ```
 
 # Third Party Libraries (2 to 4 hours)

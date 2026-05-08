@@ -12,20 +12,22 @@ env:
   INSTALL_PREFIX: "/opt/mpact"
 
 jobs:
-  main:
+  ubuntu24:
     name: Ubuntu 24.04
     runs-on: ubuntu-24.04
 
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
       - name: Show Runner info
         run: |
           cat /etc/os-release
           uname -a
           nproc
           lscpu
+
+      - name: Setup install directory
+        run: |
+          sudo mkdir -p "${INSTALL_PREFIX}"
+          sudo chown -R "$(id -u):$(id -g)" "${INSTALL_PREFIX}"
 
       - name: Install prereqs
         run: |
@@ -42,10 +44,49 @@ jobs:
             python3-h5py        \
             libpng-dev
 
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Configure
+        run: |
+          cmake -S mpact_tpls -B mpact_tpls/build -D CMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -D MPACT_TPLs_BUILD_PARALLEL=2
+
+      - name: Build and Install
+        run: |
+          cmake --build mpact_tpls/build
+
+  rocky8:
+    name: RockyLinux 8.10
+    runs-on: ubuntu-24.04
+    container: rockylinux:8
+
+    steps:
+      - name: Show Runner info
+        run: |
+          cat /etc/os-release
+          uname -a
+          nproc
+          lscpu
+
       - name: Setup install directory
         run: |
           sudo mkdir -p "${INSTALL_PREFIX}"
           sudo chown -R "$(id -u):$(id -g)" "${INSTALL_PREFIX}"
+
+      - name: Install prereqs
+        run: |
+          sudo dnf install -y \
+            gcc gcc-c++ gfortran \
+            cmake make git \
+            libpng-devel \
+            python3
+
+      - name: Install Python packages
+        run: |
+          python3 -m pip install --user numpy matplotlib pandas h5py
+
+      - name: Check out repository
+        uses: actions/checkout@v4
 
       - name: Configure
         run: |

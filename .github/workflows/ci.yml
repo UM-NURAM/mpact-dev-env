@@ -94,7 +94,6 @@ jobs:
           dnf install -y epel-release
           dnf config-manager --set-enabled powertools
           dnf install -y python3-numpy python3-matplotlib python3-pandas python3-h5py
-          python3 -c "import numpy; print(numpy.__version__)"
 
       - name: Configure
         run: |

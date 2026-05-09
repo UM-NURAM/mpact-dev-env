@@ -50,7 +50,10 @@ jobs:
 
       - name: Configure
         run: |
-          cmake -S mpact_tpls -B mpact_tpls/build -D CMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -D MPACT_TPLs_BUILD_PARALLEL=2
+          cmake -S mpact_tpls -B mpact_tpls/build \
+            -D CMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" \
+            -D MPACT_TPLs_BUILD_PARALLEL=2 \
+            -D MPACT_TPLs_LOG_TO_SCREEN=ON
 
       - name: Build and Install
         run: |
@@ -62,6 +65,9 @@ jobs:
     container: rockylinux:8
 
     steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
       - name: Show Runner info
         run: |
           whoami
@@ -88,13 +94,13 @@ jobs:
           dnf install -y epel-release
           dnf config-manager --set-enabled powertools
           dnf install -y python3-numpy python3-matplotlib python3-pandas python3-h5py
-
-      - name: Check out repository
-        uses: actions/checkout@v4
+          python3 -c "import numpy; print(numpy.__version__)"
 
       - name: Configure
         run: |
-          cmake -S mpact_tpls -B mpact_tpls/build -D CMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" -D MPACT_TPLs_BUILD_PARALLEL=2
+          cmake -S mpact_tpls -B mpact_tpls/build \
+            -D CMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" \
+            -D MPACT_TPLs_BUILD_PARALLEL=2
 
       - name: Build and Install
         run: |

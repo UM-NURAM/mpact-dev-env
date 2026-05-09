@@ -75,7 +75,7 @@ endif()
 foreach(PYPACKAGE ${REQUIRED_PYTHON_PACKAGES})
     execute_process(
         COMMAND ${Python3_EXECUTABLE} -c
-            "from importlib.metadata import version; print(version('${PYPACKAGE}'))"
+            "import ${PYPACKAGE}; print(${PYPACKAGE}.__version__)"
         RESULT_VARIABLE IMPORT_RESULT
         OUTPUT_VARIABLE PYPACKAGE_VERSION
         OUTPUT_STRIP_TRAILING_WHITESPACE

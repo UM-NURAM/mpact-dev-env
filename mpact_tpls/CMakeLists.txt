@@ -68,14 +68,18 @@ if(Python3_VERSION VERSION_GREATER_EQUAL 3.13)
     # For python version greater than 3.12, this can be installed with
     # conda -c conda-forge install -y standard-xdrlib
     set(REQUIRED_PYTHON_PACKAGES ${REQUIRED_PYTHON_PACKAGES} standard-xdrlib)
-#else()
-#    set(REQUIRED_PYTHON_PACKAGES ${REQUIRED_PYTHON_PACKAGES} xdrlib)
 endif()
 
 foreach(PYPACKAGE ${REQUIRED_PYTHON_PACKAGES})
+    if(Python3_VERSION VERSION_GREATER_EQUAL 3.13)
+      set(PYPACKAGE_VERIFY_COMMAND "from importlib.metadata import version; print(version('${PYPACKAGE}'))")
+    else()
+      set(PYPACKAGE_VERIFY_COMMAND "import ${PYPACKAGE}; print(${PYPACKAGE}.__version__)")
+    endif()
+
     execute_process(
         COMMAND ${Python3_EXECUTABLE} -c
-            "import ${PYPACKAGE}; print(${PYPACKAGE}.__version__)"
+          "${PYPACKAGE_VERIFY_COMMAND}"
         RESULT_VARIABLE IMPORT_RESULT
         OUTPUT_VARIABLE PYPACKAGE_VERSION
         OUTPUT_STRIP_TRAILING_WHITESPACE

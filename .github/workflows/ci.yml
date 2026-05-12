@@ -52,8 +52,7 @@ jobs:
         run: |
           cmake -S mpact_tpls -B mpact_tpls/build \
             -D CMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" \
-            -D MPACT_TPLs_BUILD_PARALLEL=4 \
-            -D MPACT_TPLs_LOG_TO_SCREEN=ON
+            -D MPACT_TPLs_BUILD_PARALLEL=4
 
       - name: Build and Install
         timeout-minutes: 240
@@ -101,7 +100,8 @@ jobs:
         run: |
           cmake -S mpact_tpls -B mpact_tpls/build \
             -D CMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" \
-            -D MPACT_TPLs_BUILD_PARALLEL=4
+            -D MPACT_TPLs_BUILD_PARALLEL=4 \
+            -D MPACT_TPLs_LOG_TO_SCREEN=ON
 
       - name: Build and Install
         run: |

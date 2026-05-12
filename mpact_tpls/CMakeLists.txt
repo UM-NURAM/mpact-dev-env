@@ -186,21 +186,13 @@ if(${PROJECT_NAME}_INSTALL_LAPACK)
           -D LAPACKE=ON
           -D BUILD_SHARED_LIBS=ON
           -D CMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+          -D CMAKE_INSTALL_LIBDIR=lib64
           -D BUILD_TESTING=OFF
           -Wno-dev
         BUILD_COMMAND   make -j${${PROJECT_NAME}_BUILD_PARALLEL}
         LOG_CONFIGURE   ${LOG_VAL}
         LOG_BUILD       ${LOG_VAL}
         LOG_INSTALL     ${LOG_VAL}
-    )
-
-    # PETSc looks for ${LAPACK_DIR}/lib64 so we create a lib64 symlink to lib
-    ExternalProject_Add_Step(lapack-${LAPACK_VERSION} post_install
-        COMMAND ${CMAKE_COMMAND} -E echo "       -- Running post-install step for lapack-${LAPACK_VERSION}"
-        COMMAND ${CMAKE_COMMAND} -E create_symlink lib lib64
-        WORKING_DIRECTORY <INSTALL_DIR>
-        DEPENDEES install
-        ALWAYS 1
     )
 else()
     message(STATUS "Skipping download of LAPACK-${LAPACK_VERSION} because ${PROJECT_NAME}_INSTALL_LAPACK=${${PROJECT_NAME}_INSTALL_LAPACK}")

@@ -118,8 +118,7 @@ if(${PROJECT_NAME}_INSTALL_MPI)
         CONFIGURE_COMMAND <SOURCE_DIR>/configure
           --prefix=<INSTALL_DIR>
           --enable-shared
-          --enable-debuginfo
-          --enable-fast=yes
+          --enable-fast=O2,ndebug
           --enable-g=dbg
           CC=${CMAKE_C_COMPILER}
           FC=${CMAKE_Fortran_COMPILER}

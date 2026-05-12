@@ -85,7 +85,7 @@ jobs:
         run: |
           dnf install -y \
             gcc gcc-c++ gcc-gfortran \
-            cmake make git \
+            cmake make git findutils \
             libpng-devel \
             python3
 

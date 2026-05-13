@@ -173,7 +173,7 @@ endif()
 
 if(${PROJECT_NAME}_INSTALL_LAPACK)
     ExternalProject_Add(lapack-${LAPACK_VERSION}
-        URL         http://www.netlib.org/lapack/lapack-${LAPACK_VERSION}.tgz
+        URL         https://github.com/Reference-LAPACK/lapack/archive/refs/tags/v${LAPACK_VERSION}.tar.gz
         URL_HASH    SHA1=${LAPACK${LAPACK_VERSION}_SHA1}
         PREFIX      ${CMAKE_BINARY_DIR}/external/lapack-${LAPACK_VERSION}
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lapack-${LAPACK_VERSION}

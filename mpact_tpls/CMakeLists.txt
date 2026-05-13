@@ -19,7 +19,7 @@ set(   GMSH_VERSION 4.12.2)
 
 set(    MPICH${MPICH_VERSION}_SHA1 1be671c6f1293ab7f4dbf7ac71c3890de3dabff0)
 set(      HDF5${HDF5_VERSION}_SHA1 73b77a23ca099ac47d8241f633bf67430007c430)
-set(  LAPACK${LAPACK_VERSION}_SHA1 84c4f7163b52b1bf1f6ca2193f6f48ed3dec0fab)
+set(  LAPACK${LAPACK_VERSION}_SHA1 4728e9b7d3f1c1d850b6a971c2e9e86ebaba9da1)
 set(    PETSC${PETSC_VERSION}_SHA1 2b6475e092356f4cb67afccb755a853db6eb5285)
 set(    SLEPC${SLEPC_VERSION}_SHA1 2dbc73a17adc87a36d52c991bcbfa81db036454b)
 set(        PNG${PNG_VERSION}_SHA1 70b9c9c450f19cd50e686e977dfd709aecc09ac3)
@@ -118,6 +118,7 @@ if(${PROJECT_NAME}_INSTALL_MPI)
         CONFIGURE_COMMAND <SOURCE_DIR>/configure
           --prefix=<INSTALL_DIR>
           --enable-shared
+          --enable-threads=multiple
           --enable-fast=O2,ndebug
           --enable-g=dbg
           CC=${CMAKE_C_COMPILER}

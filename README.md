@@ -1,8 +1,8 @@
 # Quickstart
 If you think you have an environment with all prerequisites satisfied, and hate reading, then you can try to simply install the TPLs with
 ```
-git clone https://github.com/UM-NURAM/mpact-dev.git
-cd mpact-dev/mpact_tpls
+git clone https://github.com/UM-NURAM/mpact-dev-env.git
+cd mpact-dev-env/mpact_tpls
 cmake -S . -B build -D CMAKE_INSTALL_PREFIX=<path to tpl install dir> -D MPACT_TPLs_BUILD_PARALLEL=4
 cmake --build build
 ```
@@ -35,7 +35,7 @@ The current TPL software stack installed by this project is
 | :------ | ------: | :-----: |
 | `mpich` | 4.2.3   | 1be671c6f1293ab7f4dbf7ac71c3890de3dabff0 |
 | `hdf5`  | 1.10.1  | 73b77a23ca099ac47d8241f633bf67430007c430 |
-| `lapack`| 3.7.1   | 84c4f7163b52b1bf1f6ca2193f6f48ed3dec0fab |
+| `lapack`| 3.7.1   | 4728e9b7d3f1c1d850b6a971c2e9e86ebaba9da1 |
 | `petsc` | 3.13.6  | 2b6475e092356f4cb67afccb755a853db6eb5285 |
 | `slepc` | 3.13.4  | 2dbc73a17adc87a36d52c991bcbfa81db036454b |
 
@@ -52,7 +52,7 @@ The recommended Linux distributions and versions are provided in the table below
 | Linux Distribution | Version |
 | :----------------- | ------: |
 |  Ubuntu            | 24.04   |
-| Rocky              | 8.10    |
+| Rocky              | 8.x     |
 
 On windows machines, using Windows Subsystem for Linux (WSL) with one of the above Linux distributions is recommended.
 macOS and arm64 architectures are not regularly tested, therefore no instructions exist for this OS at this time.
@@ -119,14 +119,29 @@ For container environments Apptainer is preferred to Singularity and Singularity
 
 ```
 sudo apt-get update
-sudo apt-get install -y gcc g++ gfortran cmake make git perl python3 python3-venv python3-pip which vim libpng-dev
+sudo apt-get install -y gcc g++ gfortran cmake make git python3 python3-venv python3-pip which vim libpng-dev
+```
+Optionally, if you want to install your Python packages at the OS level, then
+```
+sudo apt-get install -y python3-numpy python3-matplotlib python3-pandas python3-h5py
 ```
 
 ### RockyLinux-8.10
 
 ```
+sudo dnf install -y gcc gcc-c++ gcc-gfortran cmake make git python3 which vim libpng-devel distutils findutils
+```
+
+Optionally, if you want to install your Python packages at the OS level, then
+```
+sudo dnf install -y epel-release
+sudo dnf config-manager --set-enabled powertools
+sudo dnf install -y python3-numpy python3-matplotlib python3-pandas python3-h5py
+```
+
+If you want to update to the latest package versions then you should also run
+```
 sudo dnf update
-sudo dnf install -y gcc gcc-c++ gcc-gfortran cmake make git python3 which vim libpng-devel
 ```
 
 ## Installing Python prequisite packages (5 minutes)
@@ -159,7 +174,7 @@ conda env create --name mpact-env
 conda activate mpact-env
 ```
 
-# Installing the Third Party Libraries (2 to 4 hours)
+# Installing the Third Party Libraries (up to 2 hours)
 Once you have all the prerequisites installed, then the next steps should be fairly automatic.
 At this stage it is just the instructions in the [quickstart](#quickstart).
 
@@ -203,7 +218,7 @@ set(   GMSH_VERSION 4.12.2)
 
 set(    MPICH${MPICH_VERSION}_SHA1 1be671c6f1293ab7f4dbf7ac71c3890de3dabff0)
 set(      HDF5${HDF5_VERSION}_SHA1 73b77a23ca099ac47d8241f633bf67430007c430)
-set(  LAPACK${LAPACK_VERSION}_SHA1 84c4f7163b52b1bf1f6ca2193f6f48ed3dec0fab)
+set(  LAPACK${LAPACK_VERSION}_SHA1 4728e9b7d3f1c1d850b6a971c2e9e86ebaba9da1)
 set(    PETSC${PETSC_VERSION}_SHA1 2b6475e092356f4cb67afccb755a853db6eb5285)
 set(    SLEPC${SLEPC_VERSION}_SHA1 2dbc73a17adc87a36d52c991bcbfa81db036454b)
 set(        PNG${PNG_VERSION}_SHA1 70b9c9c450f19cd50e686e977dfd709aecc09ac3)

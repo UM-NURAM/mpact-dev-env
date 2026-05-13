@@ -8,32 +8,103 @@ on:
     branches:
       - main
 
-jobs:
-  main:
-    runs-on: ubuntu-22.04
-    strategy:
-      fail-fast: true
-      #Naming convention?  Use '@'? '-'?
-      compilers: [gcc@8.3.0]
-      #matrix:
-      #build_type: [Debug, Release]
+env:
+  INSTALL_PREFIX: "/opt/mpact"
 
-    name: "${{ compilers }}"
+jobs:
+  ubuntu24:
+    name: Ubuntu 24.04
+    runs-on: ubuntu-24.04
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Show Runner info
+        run: |
+          whoami
+          id
+          cat /etc/os-release
+          uname -a
+          lscpu
 
-      - name: Install Environment ${{ compilers }}
-        #Does this need a .yml at the end?
-        run: spack env install mpact-dev-${{ compilers }}
+      - name: Setup install directory
+        run: |
+          sudo mkdir -p "${INSTALL_PREFIX}"
+          sudo chown -R "$(id -u):$(id -g)" "${INSTALL_PREFIX}"
 
-        #- name: Configure
-        #  run: |
-        #    cmake -S . -B build \
-        #          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+      - name: Install prereqs
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+            gcc g++ gfortran \
+            cmake make git   \
+            python3             \
+            python3-venv        \
+            python3-pip         \
+            python3-numpy       \
+            python3-matplotlib  \
+            python3-pandas      \
+            python3-h5py        \
+            libpng-dev
 
-        #- name: Build
-        #  run: make -C build
+      - name: Check out repository
+        uses: actions/checkout@v4
 
-        #- name: Run tests
-        #  run: CTEST_OUTPUT_ON_FAILURE=ON make -C build test
+      - name: Configure
+        run: |
+          cmake -S mpact_tpls -B mpact_tpls/build \
+            -D CMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" \
+            -D MPACT_TPLs_BUILD_PARALLEL=4
+
+      - name: Build and Install
+        timeout-minutes: 240
+        run: |
+          cmake --build mpact_tpls/build
+
+  rocky8:
+    name: RockyLinux 8
+    runs-on: ubuntu-24.04
+    container: rockylinux:8
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Show Runner info
+        run: |
+          whoami
+          id
+          cat /etc/os-release
+          uname -a
+          lscpu
+
+      - name: Setup install directory
+        run: |
+          mkdir -p "${INSTALL_PREFIX}"
+          chown -R "$(id -u):$(id -g)" "${INSTALL_PREFIX}"
+
+      - name: Install prereqs
+        run: |
+          dnf install -y \
+            gcc gcc-c++ gcc-gfortran \
+            cmake make git findutils \
+            libpng-devel which diffutils \
+            python3
+
+      - name: Install Python packages
+        run: |
+          dnf install -y epel-release
+          dnf config-manager --set-enabled powertools
+          dnf install -y python3-numpy python3-matplotlib python3-pandas python3-h5py
+
+      - name: Configure
+        timeout-minutes: 240
+        run: |
+          cmake -S mpact_tpls -B mpact_tpls/build \
+            -D CMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" \
+            -D MPACT_TPLs_BUILD_PARALLEL=4 \
+            -D MPACT_TPLs_LOG_TO_SCREEN=ON
+
+      - name: Build and Install
+        run: |
+          which python3
+          python3 -c "import distutils.sysconfig; print(distutils.__version__)"
+          cmake --build mpact_tpls/build

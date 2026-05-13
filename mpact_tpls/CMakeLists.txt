@@ -19,7 +19,7 @@ set(   GMSH_VERSION 4.12.2)
 
 set(    MPICH${MPICH_VERSION}_SHA1 1be671c6f1293ab7f4dbf7ac71c3890de3dabff0)
 set(      HDF5${HDF5_VERSION}_SHA1 73b77a23ca099ac47d8241f633bf67430007c430)
-set(  LAPACK${LAPACK_VERSION}_SHA1 84c4f7163b52b1bf1f6ca2193f6f48ed3dec0fab)
+set(  LAPACK${LAPACK_VERSION}_SHA1 4728e9b7d3f1c1d850b6a971c2e9e86ebaba9da1)
 set(    PETSC${PETSC_VERSION}_SHA1 2b6475e092356f4cb67afccb755a853db6eb5285)
 set(    SLEPC${SLEPC_VERSION}_SHA1 2dbc73a17adc87a36d52c991bcbfa81db036454b)
 set(        PNG${PNG_VERSION}_SHA1 70b9c9c450f19cd50e686e977dfd709aecc09ac3)
@@ -68,14 +68,18 @@ if(Python3_VERSION VERSION_GREATER_EQUAL 3.13)
     # For python version greater than 3.12, this can be installed with
     # conda -c conda-forge install -y standard-xdrlib
     set(REQUIRED_PYTHON_PACKAGES ${REQUIRED_PYTHON_PACKAGES} standard-xdrlib)
-#else()
-#    set(REQUIRED_PYTHON_PACKAGES ${REQUIRED_PYTHON_PACKAGES} xdrlib)
 endif()
 
 foreach(PYPACKAGE ${REQUIRED_PYTHON_PACKAGES})
+    if(Python3_VERSION VERSION_GREATER_EQUAL 3.13)
+      set(PYPACKAGE_VERIFY_COMMAND "from importlib.metadata import version; print(version('${PYPACKAGE}'))")
+    else()
+      set(PYPACKAGE_VERIFY_COMMAND "import ${PYPACKAGE}; print(${PYPACKAGE}.__version__)")
+    endif()
+
     execute_process(
         COMMAND ${Python3_EXECUTABLE} -c
-            "from importlib.metadata import version; print(version('${PYPACKAGE}'))"
+          "${PYPACKAGE_VERIFY_COMMAND}"
         RESULT_VARIABLE IMPORT_RESULT
         OUTPUT_VARIABLE PYPACKAGE_VERSION
         OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -114,8 +118,8 @@ if(${PROJECT_NAME}_INSTALL_MPI)
         CONFIGURE_COMMAND <SOURCE_DIR>/configure
           --prefix=<INSTALL_DIR>
           --enable-shared
-          --enable-debuginfo
-          --enable-fast=yes
+          --enable-threads=multiple
+          --enable-fast=O2,ndebug
           --enable-g=dbg
           CC=${CMAKE_C_COMPILER}
           FC=${CMAKE_Fortran_COMPILER}
@@ -169,7 +173,7 @@ endif()
 
 if(${PROJECT_NAME}_INSTALL_LAPACK)
     ExternalProject_Add(lapack-${LAPACK_VERSION}
-        URL         http://www.netlib.org/lapack/lapack-${LAPACK_VERSION}.tgz
+        URL         https://github.com/Reference-LAPACK/lapack/archive/refs/tags/v${LAPACK_VERSION}.tar.gz
         URL_HASH    SHA1=${LAPACK${LAPACK_VERSION}_SHA1}
         PREFIX      ${CMAKE_BINARY_DIR}/external/lapack-${LAPACK_VERSION}
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lapack-${LAPACK_VERSION}
@@ -183,21 +187,13 @@ if(${PROJECT_NAME}_INSTALL_LAPACK)
           -D LAPACKE=ON
           -D BUILD_SHARED_LIBS=ON
           -D CMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+          -D CMAKE_INSTALL_LIBDIR=lib64
           -D BUILD_TESTING=OFF
           -Wno-dev
         BUILD_COMMAND   make -j${${PROJECT_NAME}_BUILD_PARALLEL}
         LOG_CONFIGURE   ${LOG_VAL}
         LOG_BUILD       ${LOG_VAL}
         LOG_INSTALL     ${LOG_VAL}
-    )
-
-    # PETSc looks for ${LAPACK_DIR}/lib64 so we create a lib64 symlink to lib
-    ExternalProject_Add_Step(lapack-${LAPACK_VERSION} post_install
-        COMMAND ${CMAKE_COMMAND} -E echo "       -- Running post-install step for lapack-${LAPACK_VERSION}"
-        COMMAND ${CMAKE_COMMAND} -E create_symlink lib lib64
-        WORKING_DIRECTORY <INSTALL_DIR>
-        DEPENDEES install
-        ALWAYS 1
     )
 else()
     message(STATUS "Skipping download of LAPACK-${LAPACK_VERSION} because ${PROJECT_NAME}_INSTALL_LAPACK=${${PROJECT_NAME}_INSTALL_LAPACK}")

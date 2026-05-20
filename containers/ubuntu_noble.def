@@ -1,0 +1,43 @@
+Bootstrap: docker
+From: ubuntu:noble
+
+%files
+    ../mpact_tpls /opt/src/mpact_tpls
+
+%post
+    set -e
+    apt-get update
+
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        vim  \
+        htop \
+        build-essential pkg-config \
+        gcc g++ gfortran    \
+        cmake make git libpng-dev \
+        python3            \
+        python3-venv       \
+        python3-pip        \
+        python3-numpy      \
+        python3-matplotlib \
+        python3-pandas     \
+        python3-h5py
+
+    apt-get clean
+    rm -rf /var/lib/apt/lists/*
+
+    cmake -S /opt/src/mpact_tpls \
+          -B /tmp/mpact_tpls-build \
+          -D CMAKE_INSTALL_PREFIX=/opt/mpact/tpls \
+          -D MPACT_TPLs_BUILD_PARALLEL=4 \
+          -D MPACT_TPLs_LOG_TO_SCREEN=ON
+
+    cmake --build /tmp/mpact_tpls-build
+
+    rm -rf /opt/mpact_tpls-build
+    rm -rf /opt/src/mpact_tpls
+
+%environment
+    export LC_ALL=C.UTF-8
+    export LANG=C.UTF-8
+    export MPACT_TPL_DIR=/opt/mpact/tpls
+    . /opt/mpact/tpls/load_dev_env.sh

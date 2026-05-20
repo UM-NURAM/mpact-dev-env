@@ -1,0 +1,35 @@
+Bootstrap: docker
+From: rockylinux:8
+
+%files
+    ../mpact_tpls /opt/src/mpact_tpls
+
+%post
+    set -e
+
+    dnf install -y gcc gcc-c++ gcc-gfortran \
+                   cmake make git findutils \
+                   libpng-devel which diffutils \
+                   pkgconf-pkg-config autoconf automake \
+                   python3
+    dnf install -y epel-release
+    dnf config-manager --set-enabled powertools
+    dnf install -y python3-numpy python3-matplotlib python3-pandas python3-h5py
+    dnf clean all
+
+    cmake -S /opt/src/mpact_tpls \
+          -B /tmp/mpact_tpls-build \
+          -D CMAKE_INSTALL_PREFIX=/opt/mpact/tpls \
+          -D MPACT_TPLs_BUILD_PARALLEL=4 \
+          -D MPACT_TPLs_LOG_TO_SCREEN=ON
+
+    cmake --build /tmp/mpact_tpls-build
+
+    rm -rf /opt/mpact_tpls-build
+    rm -rf /opt/src/mpact_tpls
+
+%environment
+    export LC_ALL=C.UTF-8
+    export LANG=C.UTF-8
+    export MPACT_TPL_DIR=/opt/mpact/tpls
+    . /opt/mpact/tpls/load_dev_env.sh
